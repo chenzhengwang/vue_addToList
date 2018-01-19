@@ -7,25 +7,28 @@
         {{item.label}}
       </li>
     </ul>
+    <p> child tells me: {{childwords}}</p>
+    <componentA msgfromfather='you die!' v-on:child-tell-me-something='listenToMyBoy'></componentA>
   </div>
 </template>
 
 <script>
 import Store from '../store'
+import ComponentA from './componentA'
 export default {
   name: 'HelloWorld',
   data () {
     return {
       title: 'this is a todo list',
-      items:[
-      ],
-      newItem:''
+      items:Store.fetch(),
+      newItem:'',
+      childwords:''
     }
   },
+  components:{ComponentA},
   watch:{
     items:{
       handler:function(items){
-        console.log(items);
         Store.save(items);
       },
       deep:true
@@ -41,6 +44,9 @@ export default {
           isFinished:false
       })
       this.newItem="";
+    },
+    listenToMyBoy:function(msg){
+      this.childwords = msg;
     }
   }
 }
